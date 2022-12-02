@@ -3,7 +3,11 @@ const prisma = new PrismaClient();
 
 class TodoController {
   static async getTodo(req, res) {
-    const todoData = await prisma.todo.findMany();
+    const todoData = await prisma.todo.findMany({
+      where: {
+        userID: req.loggedUser.id,
+      },
+    });
     res.status(200).json(todoData);
   }
 
@@ -13,6 +17,7 @@ class TodoController {
       data: {
         title,
         desc,
+        userID: req.loggedUser.id,
       },
     });
     res.status(201).json(result);
@@ -29,7 +34,7 @@ class TodoController {
   }
 
   static async deleteTodo(req, res) {
-    const result = await prisma.todo.delete({ where: { id: req.params.id } });
+    await prisma.todo.delete({ where: { id: req.params.id } });
     res.status(200).json("Data deleted successfully");
   }
 }

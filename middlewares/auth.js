@@ -1,6 +1,6 @@
-import { decodeToken } from "../helper/jwt";
+import { decodeToken } from "../helper/jwt.js";
 import { PrismaClient } from "@prisma/client";
-const prisma = PrismaClient();
+const prisma = new PrismaClient();
 
 function authentication(req, res, next) {
   if (req.headers.authorization) {
@@ -34,4 +34,5 @@ async function authorization(req, res, next) {
     res.status(403).json({ message: "Forbidden access" });
   }
 }
+
 export { authentication, authorization };
